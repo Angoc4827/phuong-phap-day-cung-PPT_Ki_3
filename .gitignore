@@ -66,3 +66,11 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Code::Blocks va ket qua chuong trinh
+*.exe
+bin/
+obj/
+*.depend
+*.layout
+ket_qua/*.csv
