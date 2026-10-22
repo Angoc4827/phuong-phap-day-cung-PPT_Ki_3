@@ -22,5 +22,4 @@
 
 Tiêu chí ĐẠT: `|x − x_mong_đợi| ≤ 10⁻⁸` với ε = 10⁻¹⁰, đúng trạng thái với các ca lỗi. Thêm bảng so sánh số vòng dây cung / chia đôi / Newton cho T1–T8.
 
-
 Lưu ý khi đối chiếu bảng slide tr. 46: dòng cuối (a = 1,514032, x = 1,5143843) không khớp dòng trên; chạy đúng thì vòng 6 là a = 1,5155206, x = 1,5158718. `[SUY LUẬN]` từ chạy lại công thức; nên ghi nhận nhẹ nhàng trong báo cáo.
