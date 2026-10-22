@@ -74,3 +74,4 @@ obj/
 *.depend
 *.layout
 ket_qua/*.csv
+!code/Makefile
