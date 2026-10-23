@@ -5,9 +5,9 @@
  * File nop duy nhat: mo bang Code::Blocks / Dev-C++ roi bam F9,
  * hoac: gcc -std=c99 -Wall -Wextra day_cung.c -o day_cung -lm
  *
- * KHUNG (23/10): cac khoi danh dau TODO se duoc TV1 chep code that vao
- * toi 25/10 tu cac file rieng trong thu muc code/. Khong sua ten ham,
- * kieu du lieu trong khoi 1 va khoi 2 (API da chot ngay 23/10).
+ * Trang thai 23/10: khoi 1-4, 6 da co; khoi 5 (TV5) va khoi 7 (TV8) con TODO.
+ * Thanh vien gui code cho TV1 qua Zalo, TV1 ghep vao dung khoi.
+ * Khong sua ten ham, kieu du lieu trong khoi 1 va khoi 2 (API chot 23/10).
  */
 
 /* ===================================================================
@@ -52,6 +52,14 @@ typedef struct {
  * =================================================================== */
 /* Khoi 4 - ham mau */
 static double f1(double x);
+static double f2(double x);
+static double f3(double x);
+static double f5(double x);
+static double f6(double x);
+static double f7(double x);
+static double f8(double x);
+static double f9(double x);
+static double f10(double x);
 
 /* Khoi 5 - thuat toan */
 KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang);
@@ -89,20 +97,34 @@ int main(void) {
 }
 
 /* ===================================================================
- * KHOI 4: CAC HAM f(x) MAU (TV6)
- * TODO TV6: chep f1..f10 tu code/ham_mau.c, them vao DS_HAM.
+ * KHOI 4: CAC HAM f(x) MAU (TV6) - lay tu ham_mau.c cua TV6
  * =================================================================== */
-static double f1(double x) { return x*x*x - x - 1.0; }   /* T1 */
+static double f1 (double x) { return x*x*x - x - 1.0; }          /* T1  (1, 2), slide tr. 43 */
+static double f2 (double x) { return x*x*x + x - 5.0; }          /* T2  (1, 2), slide tr. 46 */
+static double f3 (double x) { return x*x*x*x - 3.0*x + 1.0; }    /* T3 (0, 1), T4 (1, 2), tr. 48 */
+static double f5 (double x) { return x*x*x + 3.0*x*x + 5.0; }    /* T5  (-4, -3), tr. 49 */
+static double f6 (double x) { return pow(2.0, x) + x - 4.0; }    /* T6  (1, 2), tr. 11 */
+static double f7 (double x) { return pow(2.0, x) - 4.0 * x; }    /* T7  (0, 1), tr. 50 */
+static double f8 (double x) { return x*x - 2.0; }                /* T8  (1, 2), tr. 39 */
+static double f9 (double x) { return cos(x) - x; }               /* T9  (0, 1), tr. 30 */
+static double f10(double x) { return pow(x, 10.0) - 1.0; }       /* T10 (0, 1.3) */
 
 static const MucHam DS_HAM[] = {
-    { "x^3 - x - 1", f1 },
-    /* TODO TV6: them cac ham con lai */
+    { "x^3 - x - 1",    f1  },
+    { "x^3 + x - 5",    f2  },
+    { "x^4 - 3x + 1",   f3  },
+    { "x^3 + 3x^2 + 5", f5  },
+    { "2^x + x - 4",    f6  },
+    { "2^x - 4x",       f7  },
+    { "x^2 - 2",        f8  },
+    { "cos(x) - x",     f9  },
+    { "x^10 - 1",       f10 }
 };
 static const int SO_HAM = (int)(sizeof DS_HAM / sizeof DS_HAM[0]);
 
 /* ===================================================================
  * KHOI 5: HAM day_cung() (TV5)
- * TODO TV5: chep than ham tu code/day_cung.c (sau khi sua theo API chot).
+ * TODO TV5: thay than ham bang code da sua theo API chot (huong_dan_sua_TV5).
  * =================================================================== */
 KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) {
     KetQua kq = {0};
@@ -114,7 +136,7 @@ KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) 
 
 /* ===================================================================
  * KHOI 6: NHAP LIEU AN TOAN VA IN KET QUA (TV7)
- * TODO TV7: chep tu code/main.c (kiem tra nhap chu thay so, a < b, ...).
+ * TV7 kiem tra lai va bo sung neu can (thong bao loi ro hon, ...).
  * =================================================================== */
 double nhap_so_thuc(const char *loi_nhac) {
     double x;
@@ -175,7 +197,7 @@ void giai_phuong_trinh(void) {
 
 /* ===================================================================
  * KHOI 7: BO TEST (TV8)
- * TODO TV8: chep 15 ca tu code/test_day_cung.c, in DAT / KHONG DAT.
+ * TODO TV8: 15 ca theo bang test case, in DAT / KHONG DAT.
  * =================================================================== */
 void chay_bo_test(void) {
     printf(">> Bo test chua duoc ghep vao (TV8)\n");
