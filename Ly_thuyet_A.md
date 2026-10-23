@@ -2,7 +2,7 @@
 
 ## 1. Nghiệm của phương trình
 
-Xét phương trình phi tuyến một ẩn:
+Xét phương trình một ẩn:
 
 $$
 f(x)=0
@@ -14,9 +14,9 @@ $$
 f(\alpha)=0
 $$
 
-Trong phương pháp tính, trước khi áp dụng các phương pháp tìm nghiệm gần đúng, cần xác định khoảng chứa nghiệm. Việc xác định khoảng chứa nghiệm giúp giới hạn phạm vi tìm kiếm và làm cơ sở để thực hiện các thuật toán tính gần đúng.
+Nghiệm của phương trình có thể là số thực hoặc số phức, nhưng ở đây ta chỉ khảo sát các nghiệm thực. 
 
-## 2. Định lý tồn tại nghiệm
+## 2. Sự tồn tại nghiệm của phương trình 
 
 ### 2.1. Phát biểu định lý
 
