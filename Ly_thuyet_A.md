@@ -48,8 +48,6 @@ Khi hàm số liên tục trên đoạn $[a;b]$ và $f(a)$, $f(b)$ trái dấu, 
 
 Khoảng $[a;b]$ được gọi là khoảng phân ly nghiệm của phương trình $f(x)=0$ nếu phương trình có duy nhất một nghiệm trong khoảng này.
 
-Khoảng phân ly nghiệm giúp xác định vị trí của nghiệm và là cơ sở để áp dụng các phương pháp giải gần đúng phương trình phi tuyến.
-
 ### 3.2. Điều kiện xác định khoảng phân ly nghiệm
 
 Để chứng minh một đoạn $[a;b]$ là khoảng phân ly nghiệm, có thể sử dụng hai điều kiện sau:
