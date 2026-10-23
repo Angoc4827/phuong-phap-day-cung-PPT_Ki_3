@@ -1,5 +1,4 @@
 # Lý thuyết A | Khoảng phân ly nghiệm, định lý tồn tại và ví dụ tìm khoảng
-**Chương 1 | Mục 2.1**
 
 ## 1. Nghiệm của phương trình
 
