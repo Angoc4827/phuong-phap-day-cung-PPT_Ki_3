@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+typedef double (*HamSo)(double);
+
 #define MAX_LICH_SU 1000
 
 // Bao phủ toàn bộ 5 trường hợp có thể xảy ra
@@ -33,6 +35,6 @@ typedef struct {
     BuocLap lich_su[MAX_LICH_SU];
 } KetQua;
 
-KetQua day_cung(double (*f)(double), double a, double b, double eps, int max_iter);
+KetQua day_cung(HamSo f, double a, double b, double eps, int max_iter);
 
 #endif // DAY_CUNG_H
