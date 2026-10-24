@@ -124,13 +124,107 @@ static const int SO_HAM = (int)(sizeof DS_HAM / sizeof DS_HAM[0]);
 
 /* ===================================================================
  * KHOI 5: HAM day_cung() (TV5)
- * TODO TV5: thay than ham bang code da sua theo API chot (huong_dan_sua_TV5).
  * =================================================================== */
 KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) {
     KetQua kq = {0};
-    (void)f; (void)a; (void)b; (void)eps; (void)n_lap; (void)bang;
-    kq.sai_so = -1;
-    kq.trang_thai = DAU_VAO_SAI;   /* tam thoi: chua co code that */
+    kq.sai_so = -1.0;
+    kq.so_vong = 0;
+    kq.so_dong = 0;
+
+    /* 1. Kiem tra dau vao co ban */
+    if (a >= b || eps <= 0 || n_lap <= 0) {
+        kq.trang_thai = DAU_VAO_SAI;
+        return kq;
+    }
+
+    /* 2. Tinh fa, fb mot lan. Kiem tra mien xac dinh */
+    double fa = f(a);
+    double fb = f(b);
+    if (isnan(fa) || isnan(fb) || isinf(fa) || isinf(fb)) {
+        kq.trang_thai = DAU_VAO_SAI;
+        return kq;
+    }
+
+    /* 3. Kiem tra nghiem dung tai mut */
+    if (fa == 0.0) {
+        kq.nghiem = a;
+        kq.so_vong = 0;
+        kq.trang_thai = HOI_TU;
+        return kq;
+    }
+    if (fb == 0.0) {
+        kq.nghiem = b;
+        kq.so_vong = 0;
+        kq.trang_thai = HOI_TU;
+        return kq;
+    }
+
+    /* 4. Kiem tra dieu kien trai dau */
+    if (fa * fb > 0.0) {
+        kq.trang_thai = KHONG_DOI_DAU;
+        return kq;
+    }
+
+    /* 5. Vong lap day cung */
+    double x_cu = a;
+    for (int n = 1; n <= n_lap; n++) {
+        // Tinh diem cat truc hoanh x va fx
+        double x = (a * fb - b * fa) / (fb - fa);
+        double fx = f(x);
+        
+        // Tinh sai so (vong 1 gan -1)
+        double sai_so_buoc = (n > 1) ? fabs(x - x_cu) : -1.0;
+
+        // Ghi vao lich su (khong vuot qua MAX_LICH_SU)
+        if (kq.so_dong < MAX_LICH_SU) {
+            kq.lich_su[kq.so_dong].n = n;
+            kq.lich_su[kq.so_dong].a = a;
+            kq.lich_su[kq.so_dong].b = b;
+            kq.lich_su[kq.so_dong].x = x;
+            kq.lich_su[kq.so_dong].fx = fx;
+            kq.lich_su[kq.so_dong].sai_so = sai_so_buoc;
+            kq.so_dong++;
+        }
+
+        // In 1 dong ra file (neu bang != NULL)
+        if (bang != NULL) {
+            if (n == 1) {
+                fprintf(bang, "%3d | %10.5f | %10.5f | %10.5f | %10.5f | %10s\n", 
+                        n, a, b, x, fx, "-");
+            } else {
+                fprintf(bang, "%3d | %10.5f | %10.5f | %10.5f | %10.5f | %10.5f\n", 
+                        n, a, b, x, fx, sai_so_buoc);
+            }
+        }
+
+        // Kiem tra dieu kien dung
+        if (fx == 0.0 || (n > 1 && sai_so_buoc < eps)) {
+            kq.nghiem = x;
+            kq.so_vong = n;
+            kq.sai_so = sai_so_buoc;
+            kq.trang_thai = HOI_TU;
+            return kq;
+        }
+
+        // Thu hep khoang phan ly nghiem
+        if (fa * fx < 0.0) {
+            b = x;
+            fb = fx;
+        } else {
+            a = x;
+            fa = fx;
+        }
+        
+        x_cu = x;
+    }
+
+    /* 6. Het vong lap chua hoi tu */
+    kq.nghiem = x_cu;
+    kq.so_vong = n_lap;
+    if (kq.so_dong > 0) {
+        kq.sai_so = kq.lich_su[kq.so_dong - 1].sai_so;
+    }
+    kq.trang_thai = DU_SO_LAN_LAP;
     return kq;
 }
 
