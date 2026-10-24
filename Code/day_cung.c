@@ -166,6 +166,10 @@ KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) 
     }
 
     /* 5. Vong lap day cung */
+    if (bang != NULL) {
+        fprintf(bang, "%3s | %13s | %13s | %13s | %13s | %13s\n",
+                "n", "a", "b", "x", "f(x)", "|x - x_cu|");
+    }
     double x_cu = a;
     for (int n = 1; n <= n_lap; n++) {
         // Tinh diem cat truc hoanh x va fx
@@ -189,10 +193,10 @@ KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) 
         // In 1 dong ra file (neu bang != NULL)
         if (bang != NULL) {
             if (n == 1) {
-                fprintf(bang, "%3d | %10.5f | %10.5f | %10.5f | %10.5f | %10s\n", 
+                fprintf(bang, "%3d | %13.10f | %13.10f | %13.10f | %13.10f | %13s\n",
                         n, a, b, x, fx, "-");
             } else {
-                fprintf(bang, "%3d | %10.5f | %10.5f | %10.5f | %10.5f | %10.5f\n", 
+                fprintf(bang, "%3d | %13.10f | %13.10f | %13.10f | %13.10f | %13.10f\n",
                         n, a, b, x, fx, sai_so_buoc);
             }
         }
