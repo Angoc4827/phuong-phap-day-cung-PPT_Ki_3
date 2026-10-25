@@ -264,7 +264,9 @@ void in_ket_qua(KetQua kq) {
     switch (kq.trang_thai) {
         case HOI_TU:
         case DU_SO_LAN_LAP:
-            if (kq.trang_thai == HOI_TU)
+            if (kq.trang_thai == HOI_TU && kq.so_vong == 0)
+                printf(">> Dau mut a hoac b chinh la nghiem.\n");
+            else if (kq.trang_thai == HOI_TU)
                 printf(">> Dung vi dat sai so eps.\n");
             else
                 printf(">> Dung vi da lap du %d vong (N).\n", kq.so_vong);
