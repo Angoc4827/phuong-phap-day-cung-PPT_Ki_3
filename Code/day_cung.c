@@ -108,6 +108,11 @@ static double f7 (double x) { return pow(2.0, x) - 4.0 * x; }    /* T7  (0, 1), 
 static double f8 (double x) { return x*x - 2.0; }                /* T8  (1, 2), tr. 39 */
 static double f9 (double x) { return cos(x) - x; }               /* T9  (0, 1), tr. 30 */
 static double f10(double x) { return pow(x, 10.0) - 1.0; }       /* T10 (0, 1.3) */
+static double f11(double x) { return x*x + 1.0; }                 /* T11: x^2 + 1 */
+static double f12(double x) { return x*x - 4.0; }                 /* T12: x^2 - 4 */
+static double f13(double x) { return x*x - 2.0; }                 /* T13: Dùng giả lập lỗi đầu vào */
+static double f14(double x) { return x*x*x + x - 5.0; }           /* T14: Giống T2 nhưng N=100 */
+static double f15(double x) { return x*x*x - x - 1.0; }           /* T15: Giống T1 nhưng N=30 (do b cố định) */
 
 static const MucHam DS_HAM[] = {
     { "x^3 - x - 1",    f1  },
@@ -236,6 +241,7 @@ KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) 
  * KHOI 6: NHAP LIEU AN TOAN VA IN KET QUA (TV7)
  * TV7 kiem tra lai va bo sung neu can (thong bao loi ro hon, ...).
  * =================================================================== */
+
 double nhap_so_thuc(const char *loi_nhac) {
     double x;
     int c;
@@ -260,9 +266,12 @@ int nhap_so_nguyen(const char *loi_nhac) {
 void in_ket_qua(KetQua kq) {
     switch (kq.trang_thai) {
         case HOI_TU:
-        case DU_SO_LAN_LAP:
-            printf(">> Nghiem gan dung: %.10f\n", kq.nghiem);
-            printf(">> So vong lap: %d\n", kq.so_vong);
+            printf(">> Hoi tu. Nghiem gan dung: %.10f\n", kq.nghiem);
+            printf(">> So vong lap: %d, sai so: %.3e\n", kq.so_vong, kq.sai_so);
+            break;
+        case DU_SO_LAN_LAP: 
+            printf("Da lap du %d lan nhung CHUA dat sai so yeu cau.\n", kq.so_vong);
+            printf(">> Nghiem gan dung hien tai: %.10f (sai so %.3e)\n", kq.nghiem, kq.sai_so);
             break;
         case KHONG_DOI_DAU:
             printf(">> f(a)*f(b) > 0: (a, b) khong phai khoang phan ly nghiem\n");
@@ -297,6 +306,75 @@ void giai_phuong_trinh(void) {
  * KHOI 7: BO TEST (TV8)
  * TODO TV8: 15 ca theo bang test case, in DAT / KHONG DAT.
  * =================================================================== */
+typedef struct{
+    const char *id; 
+    HamSo f; 
+    double a,b; // khoảng phân ly a,b
+    double eps; // Sai số cho phép (điều kiện dừng theo sai số) 
+    int nmax;  // số lần lặp tối đa 
+    double x_mong_doi;  //không đúng với test lỗi 
+    int so_vong_chay;  // Số vòng chạy để ra kết quả  
+    TrangThai tt_mong_doi; 
+} CaTest; 
+static const char *ten_tt(TrangThai t){
+    switch(t){
+        case HOI_TU: return "HOI TU";
+        case DU_SO_LAN_LAP: return "DU SO LAN LAP";
+        case KHONG_DOI_DAU: return "KHONG DOI DAU";
+        case DAU_VAO_SAI: return "DAU VAO SAI";
+    }
+    return "?";
+} 
 void chay_bo_test(void) {
-    printf(">> Bo test chua duoc ghep vao (TV8)\n");
+    // khai báo 15 ca test
+    static const CaTest ds_test[15] = 
+    {
+        // id   f    a    b    eps  N   x mong doi   vong   trang thai 
+        { "T1", f1, 1.0, 2.0, 1e-4, 2, 1.2531120332, 2, DU_SO_LAN_LAP },  //T1 dừng khi đủ 2 vòng 
+        { "T2", f2, 1.0, 2.0, 1e-4,  5, 1.5155206007, 5,  DU_SO_LAN_LAP },  //T2 dừng khi đủ 5 vòng 
+        { "T3", f3, 0.0, 1.0, 1e-4, 100, 0.3376673882, 5,  HOI_TU },
+        { "T4",  f3,  1.0, 2.0, 1e-4, 100, 1.3073768960, 18, HOI_TU },
+        { "T5",  f5, -4.0,-3.0, 1e-4, 100, -3.4259687126, 7, HOI_TU },
+        { "T6",  f6,  1.0, 2.0, 1e-4, 100, 1.3861644283, 6,  HOI_TU },
+        { "T7",  f7,  0.0, 1.0, 1e-4, 100, 0.3099073796, 4,  HOI_TU },
+        { "T8",  f8,  1.0, 2.0, 1e-4, 100, 1.4142011834, 6,  HOI_TU },
+        { "T9",  f9,  0.0, 1.0, 1e-4, 5,   0.7390847824, 5,  HOI_TU },
+        { "T10", f10, 0.0, 1.3, 1e-4, 100, 0.9996886513, 39, HOI_TU },
+        { "T11", f11,-1.0, 1.0, 1e-4, 5,   0.0,          0,  KHONG_DOI_DAU },
+        { "T12", f12, 2.0, 3.0, 1e-4, 5,   2.0,          0,  HOI_TU }, // hoặc đầu mút là nghiệm
+        { "T13", f13, 2.0, 1.0, 0.0,  5,   0.0,          0,  DAU_VAO_SAI },
+        { "T14", f14, 1.0, 2.0, 1e-4, 100, 1.5159546734, 7,  HOI_TU },
+        { "T15", f15, 1.0, 2.0, 1e-4, 30,  1.3247179572, 30, DU_SO_LAN_LAP }
+        
+    };
+    const int so_ca = (int)(sizeof ds_test/ sizeof ds_test[0]);
+    int dat = 0; 
+
+    printf("\n====================================================================================================================\n");
+    printf("\n%-5s | %-14s | %-14s | %-5s | %-5s | %-15s | %-15s | %-10s | %s\n",
+           "Ma", "TT thuc te", "TT mong doi", "Vong", "V.md",
+           "Nghiem tinh", "Nghiem mong doi", "Sai so", "Ket luan");
+    printf("====================================================================================================================\n");
+
+    for (int i = 0; i < so_ca; i++) {
+        const CaTest *ct = &ds_test[i];
+        KetQua kq = day_cung(ct->f, ct->a, ct->b, ct->eps, ct->nmax, NULL);
+
+        int la_loi = (ct->tt_mong_doi == KHONG_DOI_DAU || ct->tt_mong_doi == DAU_VAO_SAI);
+        int khop_trang_thai = (kq.trang_thai == ct->tt_mong_doi);
+        int khop_vong = (kq.so_vong == ct->so_vong_chay);
+        int khop_nghiem = la_loi || (fabs(kq.nghiem - ct->x_mong_doi) < 1e-3);
+        int ok = khop_trang_thai && khop_vong && khop_nghiem;
+        if(ok) dat++;
+
+        printf("%-5s | %-14s | %-14s | %-5d | %-5d | ", ct->id, ten_tt(kq.trang_thai), ten_tt(ct->tt_mong_doi), kq.so_vong, ct->so_vong_chay);
+        if(la_loi){
+            printf("%-15s | %-15s | %-10s | ", "-", "-", "-");
+        }
+        else{
+            printf("%-15.8f | %-15.8f | %-10.2e | ", kq.nghiem, ct->x_mong_doi, kq.sai_so);
+        }
+        printf("%s\n", ok ? "DAT" : "KHONG DAT");
+    }
+    printf(">> Tong ket: Dat %d/%d ca test.\n", dat, so_ca);
 }
