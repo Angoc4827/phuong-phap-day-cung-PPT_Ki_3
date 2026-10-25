@@ -120,7 +120,9 @@ static const MucHam DS_HAM[] = {
     { "2^x - 4x",       f7  },
     { "x^2 - 2",        f8  },
     { "cos(x) - x",     f9  },
-    { "x^10 - 1",       f10 }
+    { "x^10 - 1",       f10 },
+    { "x^2 + 1",        f11 },
+    { "x^2 - 4",        f12 }
 };
 static const int SO_HAM = (int)(sizeof DS_HAM / sizeof DS_HAM[0]);
 
