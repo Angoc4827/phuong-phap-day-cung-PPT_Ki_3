@@ -289,7 +289,7 @@ void in_ket_qua(KetQua kq) {
 }
 
 void giai_phuong_trinh(void) {
-    int i, chon;
+    int i, chon, che_do;
     double a, b, eps;
     int n_lap;
 
@@ -301,8 +301,21 @@ void giai_phuong_trinh(void) {
 
     a     = nhap_so_thuc(">> Nhap a: ");
     b     = nhap_so_thuc(">> Nhap b: ");
-    eps   = nhap_so_thuc(">> Nhap sai so eps: ");
-    n_lap = nhap_so_nguyen(">> Nhap so lan lap N: ");
+
+    printf("Dieu kien dung:\n");
+    printf("1. Theo sai so eps\n");
+    printf("2. Theo so lan lap N\n");
+    printf("3. Ca hai (dung khi dat mot trong hai)\n");
+    do {
+        che_do = nhap_so_nguyen(">> Chon dieu kien dung: ");
+    } while (che_do < 1 || che_do > 3);
+
+    eps   = 1e-300;
+    n_lap = MAX_LICH_SU;
+    if (che_do == 1 || che_do == 3)
+        eps = nhap_so_thuc(">> Nhap sai so eps: ");
+    if (che_do == 2 || che_do == 3)
+        n_lap = nhap_so_nguyen(">> Nhap so lan lap N: ");
 
     kq_chung = day_cung(DS_HAM[chon - 1].f, a, b, eps, n_lap, stdout);
     in_ket_qua(kq_chung);
