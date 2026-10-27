@@ -5,9 +5,12 @@
  * File nop duy nhat: mo bang Code::Blocks / Dev-C++ roi bam F9,
  * hoac: gcc -std=c99 -Wall -Wextra day_cung.c -o day_cung -lm
  *
- * Trang thai 23/10: khoi 1-4, 6 da co; khoi 5 (TV5) va khoi 7 (TV8) con TODO.
- * Thanh vien gui code cho TV1 qua Zalo, TV1 ghep vao dung khoi.
- * Khong sua ten ham, kieu du lieu trong khoi 1 va khoi 2 (API chot 23/10).
+ * Chuong trinh gom 7 khoi:
+ *   1. Thu vien va kieu du lieu   2. Khai bao nguyen mau   3. main (menu)
+ *   4. Ham f(x) mau               5. day_cung()            6. Nhap lieu, in ket qua
+ *   7. Bo test 15 ca (menu 2)
+ * Menu 1: giai phuong trinh (chon ham, nhap a, b, eps, N, in bang lap)
+ * Menu 2: chay 15 test case, in DAT / KHONG DAT
  */
 
 /* ===================================================================
@@ -238,7 +241,6 @@ KetQua day_cung(HamSo f, double a, double b, double eps, int n_lap, FILE *bang) 
 
 /* ===================================================================
  * KHOI 6: NHAP LIEU AN TOAN VA IN KET QUA (TV7)
- * TV7 kiem tra lai va bo sung neu can (thong bao loi ro hon, ...).
  * =================================================================== */
 
 double nhap_so_thuc(const char *loi_nhac) {
@@ -308,7 +310,7 @@ void giai_phuong_trinh(void) {
 
 /* ===================================================================
  * KHOI 7: BO TEST (TV8)
- * TODO TV8: 15 ca theo bang test case, in DAT / KHONG DAT.
+ * 15 ca theo bang test case, in DAT / KHONG DAT.
  * =================================================================== */
 typedef struct{
     const char *id; 
